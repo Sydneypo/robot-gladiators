@@ -17,20 +17,20 @@ for(var i = 0; i < enemyNames.length; i++) {
 }
 
 var fight = function(enemyName) {
-    //alert users that they are starting the round
-    window.alert("Welcome to Robot Gladiators!");
+    while(enemyHealth > 0) {
+        //alert users that they are starting the round
     var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
     if (promptFight === "fight" || promptFight === "FIGHT") {
         //subtract the value of 'playerAttack' from the value of 'enemyHealth' and use that result to update the value in the 'enemyHealth' variable
         enemyHealth = enemyHealth - playerAttack; 
         console.log(
-        playerName + " attacked " + enemyName + ". " + enemyName + " now has " + enemyHealth + " health remaining."
-        );
+            playerName + " attacked " + enemyName + ". " + enemyName + " now has " + enemyHealth + " health remaining."
+            );
 
         // check enemy's health
         if (enemyHealth <=0) {
             window.alert(enemyName + " has died!");
-        }
+            }
 
         else {
             window.alert(enemyName + " still has " + enemyHealth + " health left.");
@@ -64,9 +64,11 @@ var fight = function(enemyName) {
                 fight();
             }
 
-        } else { 
-            window.alert("You need to pick a valid option. Try again!");
-        }
+            } else { 
+                window.alert("You need to pick a valid option. Try again!");
+            }
+    }
+
 };
 
 
@@ -76,5 +78,8 @@ var fight = function(enemyName) {
 
 
 for(var i = 0; i < enemyNames.length; i++) {
-    fight(enemyNames[i]);
+    var pickedEnemyName = enemyNames[i];
+    enemyHealth = 50;
+    // call fight function with enemy robot
+    fight(pickedEnemyName);
 }
