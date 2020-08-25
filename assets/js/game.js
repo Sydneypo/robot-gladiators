@@ -5,23 +5,27 @@ var startGame = function() {
     playerInfo.reset();
 
     for(var i = 0; i < enemyInfo.length; i++) {
-        if (player.health > 0) {
+        // check player stats
+        console.log(playerInfo);
+        
+        // if player is still alive, keep fighting
+        if (playerInfo.health > 0) {
             // let user know what round they are in, remember that arrays start at 0 so it needs to have 1 added to it 
             window.alert("Welcome to Battlebots! Round " + ( i + 1 ));
     
             // pick new enemy to fight based on the index of the enemyNames array
-            var pickedEnemyName = enemyNames[i];
+            var pickedEnemyObj = enemyInfo[i];
 
-            // reset enemyHealth before starting new fight
-            enemyHealth = randomNumber(40, 60);
+            // set health for picked enemy
+            pickedEnemyObj.health = randomNumber(40, 60);
 
-            // use debugger to pause script from running and check whats going on at that moment in the code
-            // debugger;
+            console.log(pickedEnemyObj);
+            
+            // pass the pickedEnemyObj object variable's value into the fight function, where it will assume the value of the enemy parameter
+            fight(pickedEnemyObj);
 
-            // pass the pickedEnemyName variable's value into the fight function, where it will assume the value of the enemyName parameter
-            fight(pickedEnemyName);
-
-            if (playerHealth > 0 && i < enemyNames.length - 1) {
+            // if player is still alive after the fight and we're not at the last enemy in the array 
+            if (playerInfo.health > 0 && i < enemyInfo.length - 1) {
                 // ask if user wants to use the store before next round
                 var storeConfirm = window.confirm("The fight is over, visit the store before the next round?");
 
@@ -44,6 +48,31 @@ var startGame = function() {
 // function to end the entire game 
 var endGame = function() {
     window.alert("The game has now ended. Let's see how you did!");
+
+    // check localStorage for high score, if it's not there, use 0
+    var highScore = localStorage.getItem("highscore") || 0; 
+   
+    
+    // if player have more money than the high score, player has new high score!
+    if (playerInfo.money > highScore) {
+        localStorage.setItem("highscore", playerInfo.money);
+        localStorage.setItem("name", playerInfo.name);
+
+        alert(playerInfo.name + "now has the high score of " + playerInfo.money + "!"); 
+    }
+    else {
+        alert(playerInfo.name + " did not beat the high score of " + highScore + ". Maybe next time!");
+    }
+
+    // ask player if they'd like to play again
+    var playAgainConfirm = window.confirm("Would you like to play again?");
+
+    if (playAgainConfirm) {
+        startGame();
+    }
+    else {
+        window.alert("Thank you for playing Battlebots! Come back soon!");
+    }
 
     // if player is stil alive, player wins!
     if (playerHealth > 0) {
@@ -117,11 +146,18 @@ var fight = function(enemy) {
             // remove enemy's health by subtracting the amount we set in the damage variable
             playerInfo.health = Math.max(0, playerInfo.health - damage);
             console.log(
-                enemy.name + " attacked " + playerInfo.name + ". " + playerInfo.name + " now has " + playerInfo.health + " health remaining."
+                enemy.name + 
+                " attacked " + 
+                playerInfo.name + 
+                ". " + 
+                playerInfo.name + 
+                " now has " + 
+                playerInfo.health + 
+                " health remaining."
             );
 
             //check player's health
-            if (playerHealth <= 0) {
+            if (playerInfo.health <= 0) {
                 window.alert(playerInfo.name + " has died!");
                 break;
             } else {
@@ -151,7 +187,7 @@ var shop = function() {
     // use switch to carry out action
     switch (shopOptionPrompt) {
         case 1:
-            playerInfo.refilHealth();
+            playerInfo.refillHealth();
             break;
         case 2:
             playerInfo.upgradeAttack();
@@ -196,8 +232,11 @@ var fightOrSkip = function() {
         return fightOrSkip();
     }
 
+    // convert promptFight to all lowercase so we can check with less options
+    promptFight = promptFight.toLowerCase();
+
     // if user picks "skip" confirm and then stop the loop
-    if (promptFight === "skip" || promptFight === "SKIP") {
+    if (promptFight === "skip") {
         // confirm user wants to skip
         var confirmSkip = window.confirm("Are you sure you'd like to quit?");
 
@@ -230,7 +269,7 @@ var playerInfo = {
         this.money = 10;
         this.attack = 10;
     },
-    refilHealth: function() {
+    refillHealth: function() {
         if (this.money >= 7) {
             window.alert("Refilling player's health by 20 for 7 dollars.");
             this.health += 20;
