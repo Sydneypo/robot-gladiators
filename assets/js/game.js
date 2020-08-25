@@ -6,6 +6,10 @@ var playerMoney = 10;
 var enemyName = "Roborto";
 var enemyHealth = 50;
 var enemyAttack = 12;
+var playerInfo = {
+    name: getPlayerName(), 
+    // Other playerInfo properties and methods
+}
 
 var enemyNames = ["Roborto", "Amy Android", "Robo Trumble"];
 console.log(enemyNames);
@@ -16,12 +20,7 @@ for(var i = 0; i < enemyNames.length; i++) {
     console.log(enemyNames[i] + " is at " + i + " index");   
 }
 
-// function to generate a random numeric value
-var randomNumber = function(min, max) {
-    var value = Math.floor(Math.random() * (max - min + 1) + min);
 
-    return value;
-}
 
 // function to start a new game
 var startGame = function() {
@@ -33,8 +32,8 @@ var startGame = function() {
     for(var i = 0; i < enemyNames.length; i++) {
         if (playerHealth > 0) {
             // let user know what round they are in, remember that arrays start at 0 so it needs to have 1 added to it 
-            window.alert("Welcome to Robot Gladiators! Round " + ( i + 1 ));
-
+            window.alert("Welcome to Battlebots! Round " + ( i + 1 ));
+    
             // pick new enemy to fight based on the index of the enemyNames array
             var pickedEnemyName = enemyNames[i];
 
@@ -195,6 +194,26 @@ var shop = function() {
             break;
     }
 };
+
+// function to set name 
+
+var getPlayerName = function() {
+    var name = "";
+
+    while (name === "" || name === null) {
+        name = prompt("What is your robot's name?");
+    }
+
+    console.log("Your Robot's name is " + name); 
+    return name;
+};
+
+// function to generate a random numeric value
+var randomNumber = function(min, max) {
+    var value = Math.floor(Math.random() * (max - min + 1) + min);
+
+    return value;
+}
 // start first game when page loads
 startGame();
 
