@@ -1,12 +1,10 @@
 
 // function to start a new game
 var startGame = function() {
-    // resent player stats
-    playerHealth = 100;
-    playerAttack = 10;
-    playerMoney = 10;
+    // reset player stats
+    playerInfo.reset();
 
-    for(var i = 0; i < enemyNames.length; i++) {
+    for(var i = 0; i < enemyInfo.length; i++) {
         if (player.health > 0) {
             // let user know what round they are in, remember that arrays start at 0 so it needs to have 1 added to it 
             window.alert("Welcome to Battlebots! Round " + ( i + 1 ));
